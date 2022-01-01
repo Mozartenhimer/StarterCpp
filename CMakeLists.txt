@@ -4,8 +4,9 @@ cmake_minimum_required(VERSION 3.15)
 project(my_very_nicely_named_project CXX)
 include(cmake/StandardProjectSettings.cmake)
 include(cmake/PreventInSourceBuilds.cmake)
-# Use CPM
-include(cmake/get_cpm.cmake)
+# Use CPM and store the library source in the library directory
+set(ENV{CPM_SOURCE_CACHE} ${CMAKE_CURRENT_SOURCE_DIR}/cpm_ext)
+include(cmake/CPM.cmake)
 # Link this 'library' to set the c++ standard / compile-time options requested
 add_library(project_options INTERFACE)
 target_compile_features(project_options INTERFACE cxx_std_17)
@@ -21,7 +22,7 @@ endif()
 add_library(project_warnings INTERFACE)
 
 # enable cache system
-include(cmake/Cache.cmake)
+# include(cmake/Cache.cmake)
 
 # Add linker configuration
 include(cmake/Linker.cmake)
@@ -58,11 +59,11 @@ if(ENABLE_PCH)
 endif()
 
 
-# if(ENABLE_TESTING)
-#   enable_testing()
-#   message("Building Tests. Be sure to check out test/constexpr_tests for constexpr testing")
-#   add_subdirectory(test)
-# endif()
+if(ENABLE_TESTING)
+  enable_testing()
+  message("Building Tests. Be sure to check out test/constexpr_tests for constexpr testing")
+  add_subdirectory(test)
+endif()
 
 
 
